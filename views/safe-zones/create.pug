@@ -1,0 +1,64 @@
+extends ../layout.pug
+    
+block title
+    title= title
+        
+block content
+    div.header 
+        div.title Create New Safe Zone
+    div.content
+        div.action-bar
+            a.btn.btn-default(href='/safe-zones')
+                svg(viewBox='0 0 14 14')
+                    path(d='M5,8 L12,8 L12,11 L14,11 L14,7 L14,7 L14,6 L5,6  L5,2 L0,7 L5,12 L5,8 Z')
+        form
+            div.form-group
+                label Name
+                div.row-input
+                    input(type='text', required)
+            div.form-group
+                label Safe Zone
+                div
+                    p.hint Use the polygon tool to create a safe zone. If you want to delete the created zone just draw a new one and the previuos zone will be deleted.
+                div#map
+            button.btn.btn-primary Submit
+
+block script
+    script(src='http://maps.google.com/maps/api/js?sensor=false&libraries=drawing')
+    script.
+       
+        var map, drawingManager;
+        var zones = [];        
+        var KMUTT = new google.maps.LatLng(13.651754, 100.494888);
+
+        function initialize() {
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 14,
+                center: KMUTT
+            });
+            
+            drawingManager = new google.maps.drawing.DrawingManager({
+                drawingMode: google.maps.drawing.OverlayType.POLYGON,
+                drawingControl: true,
+                drawingControlOptions: {
+                    position: google.maps.ControlPosition.TOP_CENTER,
+                    drawingModes: [
+                        google.maps.drawing.OverlayType.POLYGON
+                    ]
+                }
+            });
+            drawingManager.setMap(map);
+            
+            google.maps.event.addListener(drawingManager, 'polygoncomplete', function(polygon) {
+                if(zones.length >= 1){
+                    for(var i=0; i<zones.length;i++)
+                        zones[i].clear();
+                }                    
+                var path = polygon.getPath();
+                zones.push(path);
+                console.log(zones);
+            });
+
+        }
+
+        window.onLoad = initialize()

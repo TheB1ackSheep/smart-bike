@@ -1,0 +1,17 @@
+extends ../layout.pug
+    
+block title
+    title= title
+        
+block content
+    div.header 
+        div.title Safe Zone
+        a.btn.btn-link(disabled) DELETE
+        a.btn.btn-link(href='/safe-zones/create') ADD NEW SAFE ZONE
+    div.content
+        div.card
+            div.header Safe Zone
+            div.content
+                p Safe zone is the specific zone on earth used to set the bound for each motocycle. If there are some of our motocycles is out of safe zone, we will notify you to know.
+                a.btn.btn-primary(href='/safe-zones/create') Create Safe Zone
+            
