@@ -11,20 +11,33 @@ block content
             a.btn.btn-default(href='/safe-zones')
                 svg(viewBox='0 0 14 14')
                     path(d='M5,8 L12,8 L12,11 L14,11 L14,7 L14,7 L14,6 L5,6  L5,2 L0,7 L5,12 L5,8 Z')
-        form
+        form(method='POST', action='create', onSubmit='return onSubmit()')
             div.form-group
-                label Name
+                label(for='name') Name
                 div.row-input
-                    input(type='text', required)
+                    input(type='text', name='name', id='name' required)
             div.form-group
                 label Safe Zone
                 div
                     p.hint Use the polygon tool to create a safe zone. If you want to delete the created zone just draw a new one and the previuos zone will be deleted.
                 div#map
+                input(type='hidden', name='safe_zone', id='safe_zone')
+                input(type='hidden', name='zoom', id='zoom', value='14')
             button.btn.btn-primary Submit
 
 block script
+    script(src='/js/dialog.js')
     script(src='http://maps.google.com/maps/api/js?sensor=false&libraries=drawing')
+    script
+        if error == 'invalid-zone'
+            | var dialog = new Dialog('Cannot create new safe zone', 'You provide an invalid zone.', 'OK', false);
+        else if error == 'invalid-data'
+            | var dialog = new Dialog('Cannot create new safe zone', 'You provide an invalid data.', 'OK', false);            
+        else if error == 'zone-already-exists'
+            | var dialog = new Dialog('Cannot create new safe zone', 'You zone is already exists. Please use other name.', 'OK', false);
+        |if(typeof dialog == 'object'){
+        | dialog.onConfirm = () => { window.location = '/safe-zones/create';}
+        | dialog.show();}
     script.
        
         var map, drawingManager;
@@ -35,6 +48,10 @@ block script
             map = new google.maps.Map(document.getElementById("map"), {
                 zoom: 14,
                 center: KMUTT
+            });
+            
+            map.addListener('zoom_changed', function() {
+                document.querySelector('form').zoom.value = map.getZoom();
             });
             
             drawingManager = new google.maps.drawing.DrawingManager({
@@ -53,12 +70,51 @@ block script
                 if(zones.length >= 1){
                     for(var i=0; i<zones.length;i++)
                         zones[i].clear();
-                }                    
+                }            
                 var path = polygon.getPath();
                 zones.push(path);
-                console.log(zones);
+                
+                var polygon = {};
+                path = path.getArray();
+                path.forEach((v, i) => {
+                    polygon[i] = {lat: v.lat(), lng: v.lng()};
+                });
+                polygon['length'] = path.length;
+                
+                document.querySelector('#safe_zone').setAttribute('value', JSON.stringify(polygon));
             });
 
         }
+        
+        function onSubmit(){
+            var form = document.querySelector('form');
+            name = form.name.value;
+            /* validation */
+            var zone;
+            try{
+                zone = JSON.parse(document.querySelector('#safe_zone').value);
+            }catch(ex){}
+            
+            if(!(typeof zone == 'object' && zone.length >= 3)){
+                var dialog = new Dialog('Warning', 'You didn\'t provide a correct zone. Please draw a polygon on map to create a safe zone.', 'OK', false);
+                dialog.onConfirm = () => {window.location = '/safe-zones/create';};
+                dialog.show();
+                return false;
+            }
+            
+            /* confirm dialog */
+            
+            var dialog = new Dialog('Confirm to create new safe zone',
+                'Please note that you will cannot edit created zone. Are you sure that you provide a correct safe zone ?',
+                'Comfirm', true);
+            dialog.onConfirm = ()=>{
+                form.submit();
+            }
+            dialog.onCancel = ()=>{window.location = '/safe-zones/create';}
+            dialog.show();
+            return false;
+        }
 
         window.onLoad = initialize()
+        
+        

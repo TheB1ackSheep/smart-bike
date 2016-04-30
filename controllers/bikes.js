@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 
 /* url = /bikes */
-router.get('/', function(req, res) {
+router.get('/', (req, res) => {
   res.render('bikes/index', { 
       title: 'Smart Motocycle - Bikes',
       menu: 'bikes'

@@ -72,6 +72,7 @@ nav .icon{
 	left: 250px;
 	bottom: 0;
 	right: 0;
+    overflow: auto;
 }
 
 .main-content .header{
@@ -82,7 +83,7 @@ nav .icon{
 }
 
 .main-content .content{
-	padding: 1em;
+	padding: 2em 4em;
 	overflow: auto;
 }
 
@@ -103,6 +104,36 @@ nav .icon{
 }
 
 .main-content .card .header, .main-content .card .content{
+	padding: 18px;
+}
+
+.overlay{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.81);
+    z-index: 1;
+}
+
+.overlay .card{
+    margin: 4em auto;
+    width: 400px;
+    border: solid 1px #ddd;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+    color: rgba(0,0,0,.54);
+    font-size: 1.2rem;
+    line-height: 1.2em;
+    background: white;
+}
+
+
+.overlay .card .header{
+	font-size: 1.5rem;
+	border-bottom: solid 1px #ddd;
+	color: rgb(0,0,0);
+}
+
+.overlay .card .header, .overlay .card .content{
 	padding: 18px;
 }
 
@@ -146,8 +177,147 @@ table th{
 }
 
 table td{
-	border-top: solid 1px #ddd;
+	border-top: solid 1px #eee;
 }
+
+table th {
+    font-weight: bold;
+    font-size: 11px;
+    letter-spacing: .02em;
+    line-height: 12px;
+    color: rgb(0,0,0);
+    text-transform: inherit;
+    color: rgba(0,0,0,.54);
+    border-bottom: 1.1px solid #eee;
+    bottom: auto;
+    vertical-align: top;
+}
+
+table td, table th {
+    text-align: left;
+}
+
+table th:first-child, table td:first-child {
+    padding-left: 8px;
+}
+
+table .col-checkbox {
+    padding-bottom: 0;
+    padding-right: 8px;
+    padding-top: 2px;
+    width: 12px;
+}
+
+table .col-checkbox {
+    width: 12px;
+    -webkit-user-select: none;
+}
+
+label.p6n-checkbox:first-of-type{
+    margin-top: 8px;
+}
+
+.col-checkbox .p6n-checkbox{
+    margin: 0;
+    bottom: auto;
+    top: 2px;
+}
+
+label.p6n-checkbox{
+    font-weight: normal;
+    margin: 4px 0 0;
+    font-size: 12px;
+    letter-spacing: normal;
+    line-height: 16px;
+    position: relative;
+}
+
+.p6n-checkbox input[type=checkbox] {
+    -webkit-transform: translateX(-9999px);
+    transform: translateX(-9999px);
+    display: block;
+    position: absolute;
+}
+
+
+.p6n-checkbox span.p6n-form-label {
+    font-size: 0;
+    height: 15px;
+    line-height: 0;
+    padding-left: 0;
+    width: 12px;
+}
+
+.p6n-checkbox span.p6n-form-label{
+    cursor: pointer;
+    letter-spacing: normal;
+    position: relative;
+    padding-left: 20px;
+    text-transform: none;
+    color: rgba(0,0,0,.87);
+    display: block;
+    margin: 0;
+}
+
+.p6n-checkbox span.p6n-form-label:before{
+    top: .1rem;
+}
+
+.p6n-checkbox span.p6n-form-label:before {
+    width: 10px;
+    height: 10px;
+    left: 0;
+    top: 4px;
+}
+
+span.p6n-form-label:before{
+    transition: all ease .2s;
+    -webkit-user-select: none;
+    content: "";
+    border: 1.1px solid #d3d3d3;
+    position: absolute;
+    background: #fff;
+}
+
+.p6n-checkbox input[type=checkbox]+span.p6n-form-label:after {
+    -webkit-transform: translate3d(4px,-8px,0) rotateZ(45deg) scale(0);
+    transform: translate3d(4px,-8px,0) rotateZ(45deg) scale(0);
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 15px;
+    height: 16px;
+    width: 6px;
+    border-right: 2px solid #3b78e7;
+    border-bottom: 2px solid #3b78e7;
+    opacity: 0;
+}
+
+.p6n-checkbox span.p6n-form-label:after{
+    -webkit-transition: opacity .2s;
+    transition: opacity .2s;
+}
+
+.p6n-checkbox input[type=checkbox]:checked+span.p6n-form-label:after {
+    -webkit-transform: translate3d(8px,-16px,0) rotateZ(45deg) scale(1);
+    transform: translate3d(8px,-16px,0) rotateZ(45deg) scale(1);
+    opacity: 1;
+    height: 12px;
+    left: -3px;
+}
+
+caption, tbody, tfoot, thead, tr {
+    border: 0;
+    font-family: inherit;
+    font-size: 100%;
+    font-style: inherit;
+    font-weight: inherit;
+    margin: 0;
+    outline: 0;
+    padding: 0;
+    vertical-align: baseline;
+}
+
 
 .hidden{
 	display: none;
@@ -172,6 +342,10 @@ table td{
     cursor: pointer;
     border-radius: 3px;
     border: solid 1px #ddd;
+}
+
+.btn + .btn{
+    margin-left: 10px; 
 }
 
 .btn:hover{
@@ -254,4 +428,19 @@ input[type=text], input[type=password]{
 
 div#map{
     height: 400px;
+}
+
+.flex{
+    display: flex;
+}
+
+.flex .card{
+    margin: 1em 1em;
+    width: 300px;
+}
+
+.flex .card .header{
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }

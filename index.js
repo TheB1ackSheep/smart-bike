@@ -1,4 +1,5 @@
 var express = require('express');
+var bodyParser = require("body-parser");
 var app = express();
 
 /* import app controllers */
@@ -9,6 +10,8 @@ var history = require('./controllers/history.js');
 
 app.set('view engine', 'pug');
 app.use(express.static('public'));
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 /* middleware for routing */
 app.get('/', function(req, res){
