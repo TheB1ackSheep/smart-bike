@@ -4,9 +4,22 @@ block title
     title= title
         
 block content
-    div.header Motocycles
+    div.header
+        div.title Motocycles
     div.content
-        div.card
-            div.header Motocycles
-            div.content Motocycles are automatically add to this section. Just send data to mqtt broker
-            
+        if bikes == null
+            div.card
+                div.header Motocycles
+                div.content Motocycles are automatically add to this section. Just send data to mqtt broker
+        else
+            table.p6n-table-full-width.p6n-table.p6n-checkboxed-table
+                tr
+                    th Plate Number
+                    th Last Position
+                each bike, index in bikes
+                    tr
+                        td= bike.plate_number
+                        td
+                            = bike.last_position.lat
+                            | ,
+                            = bike.last_position.lng
